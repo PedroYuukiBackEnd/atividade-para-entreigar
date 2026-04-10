@@ -76,3 +76,26 @@ def cadastrar_viagem():
             session.rollback()
             print(f"Ocorreu um erro {erro}")
 
+def listar_companhias():
+    with Session() as session:
+        try:
+            todas_companhias = session.query(Companhia).all()
+            for companhia in todas_companhias:
+                print(f"\--- Companhia {companhia.nome} ---")
+                for viagens in companhia.viagens:
+                    print(viagens.destino)
+        except Exception as erro:
+            session.rollback()
+            print(f"Ocorreu um erro {erro}")
+
+def listar_viagem():
+    with Session() as session:
+        try:
+            todas_viagens = session.query(Companhia).all()
+            for viagem in todas_viagens:
+                destinos = [voo.destino for voo in viagens.companhias]
+                print(f"Destino: {viagens.destino} - Companhias: {destinos}")
+                    
+        except Exception as erro:
+            session.rollback()
+            print(f"Ocorreu um erro {erro}")
