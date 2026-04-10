@@ -45,11 +45,21 @@ with Session() as session:
     try:
         gol = Companhia(nome="Gol")
         azul = Companhia(nome="Azul")
+        internacional = Companhia(nome="internacional")
+        latam = Companhia(nome="latam")
 
-        viagem1 = Voo("cracolandia", 13, companhia=azul)
-        viagem2 = Voo("canada", 15, companhia=gol)
+        v1 = Voo("cracolandia", 13, companhia=azul)
+        v2 = Voo("Canada", 15, companhia=gol)
+        v3 = Voo("Japão", 13, companhia=internacional)
+        v4 = Voo("Jamaica", 13, companhia=latam)
+        v5 = Voo("Inglaterra", 13, companhia=internacional)
+        v6 = Voo("Estaods Unidos", 13, companhia=internacional)
+        v7 = Voo("Argentina", 13, companhia=gol)
+        v8 = Voo("Portugal", 13, companhia=azul)
+        v9 = Voo("Angola", 13, companhia=gol)
+        v10 = Voo("France", 13, companhia=azul)
 
-        session.add_all([gol, azul, viagem1, viagem2]) 
+        session.add_all([gol, azul, internacional, latam, v1,v2,v3,v4,v5,v6,v7,v8,v9,v10]) 
         session.commit()
 
         print("Companhias e voos inseridos!")
