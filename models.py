@@ -41,29 +41,38 @@ Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
 
-with Session() as session:
-    try:
-        gol = Companhia(nome="Gol")
-        azul = Companhia(nome="Azul")
-        internacional = Companhia(nome="internacional")
-        latam = Companhia(nome="latam")
+#cadastro de empresa e viagem
+def cadastrar_empresa():
+    with Session() as session:
+        try:
+            nome_empresa = input("Digite o nome da empresa: ").capitalize()
+            empresa = Companhia(nome=nome_empresa)
+            session.add(empresa)
+            session.commit()
+            print(f"Empresa {nome_empresa} cadastrado com sucesso!")
+        except Exception as erro:
+            session.rollback()
+            print(f"Ocorreu um erro {erro}")
 
-        v1 = Voo("cracolandia", 13, companhia=azul)
-        v2 = Voo("Canada", 15, companhia=gol)
-        v3 = Voo("Japão", 13, companhia=internacional)
-        v4 = Voo("Jamaica", 13, companhia=latam)
-        v5 = Voo("Inglaterra", 13, companhia=internacional)
-        v6 = Voo("Estaods Unidos", 13, companhia=internacional)
-        v7 = Voo("Argentina", 13, companhia=gol)
-        v8 = Voo("Portugal", 13, companhia=azul)
-        v9 = Voo("Angola", 13, companhia=gol)
-        v10 = Voo("France", 13, companhia=azul)
+def cadastrar_viagem():
+    with Session() as session:
+        try:
+            destino = input("Digite o destino: ").capitalize()
+            empresa = session.query(Companhia).filter_by(nome=destino).first()
+            if empresa == None:
+                print(f"Nenhum voo encontrado com esse nome {destino}")
+                return
+            else:
+                companhias = input("Digite o nome da companhia para cadastrar").capitalize()
+                companhia = session.query(Companhia).filter_by(nome=companhias).first()
+                if companhia == None:
+                    print(f"Nenhuma companhia cadastrada com esse nome {companhias}")
+                    return
+                else:
+                    companhia.empresa.append(empresa)
+                    session.commit()
+                    print(f"Viagem {destino} registrada com sucesso na companhia {companhias}")
+        except Exception as erro:
+            session.rollback()
+            print(f"Ocorreu um erro {erro}")
 
-        session.add_all([gol, azul, internacional, latam, v1,v2,v3,v4,v5,v6,v7,v8,v9,v10]) 
-        session.commit()
-
-        print("Companhias e voos inseridos!")
-
-    except Exception as erro:
-        session.rollback()
-        print(f"Ocorreu um erro: {erro}")
