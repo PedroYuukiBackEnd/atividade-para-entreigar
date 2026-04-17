@@ -14,3 +14,17 @@
 A tabela "empresa" é a tabela pai (onde os voos vão ser manipulados), "viagens" sendo a filha.
 # O código tem uma navegação fácil?
 - Sim, o código tem um menu para facilitar qualquer movimento do usuário.
+
+# Como Usar? 
+### Siga as instruções:
+#### Faça download do arquivo zip pelo nosso repositorio do github [segue a imagem]
+![Download-ZIP](img/a.png)
+
+#### Extraia o arquivo .zip no seu dispositivo e abra no executor de códigos
+![Extração-ZIP](img/b.png)
+
+
+
+
+# *ACABOU*
+![EMOJI](img/c.jpg)
