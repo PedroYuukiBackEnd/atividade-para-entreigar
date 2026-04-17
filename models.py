@@ -108,7 +108,7 @@ def cadastrar_viagem():
 
 
 #----------------------------------------------------------
-# CADASTRO VIAGEM
+# LISTAR COMPANHIAS
 #----------------------------------------------------------
 def listar_companhias():
     with Session() as session:
@@ -188,4 +188,77 @@ def atualizar_viagem():
 #----------------------------------------------------------
 # DELETAR EMPRESA
 #----------------------------------------------------------
+def deletar_empresa():
+    with Session() as session:
+        try:
+            id_empresa = int(input("ID da empresa: "))
+            empresa = session.get(Companhia, id_empresa)
 
+            if not empresa:
+                print("Empresa não encontrada!")
+                return
+
+            session.delete(empresa)
+            session.commit()
+
+            print("Empresa deletada com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro: {erro}")
+
+
+#----------------------------------------------------------
+# DELETAR VIAGEM
+#----------------------------------------------------------
+def deletar_viagem():
+    with Session() as session:
+        try:
+            id_voo = int(input("ID do voo: "))
+            voo = session.get(Voo, id_voo)
+
+            if not voo:
+                print("Voo não encontrado!")
+                return
+
+            session.delete(voo)
+            session.commit()
+
+            print("Voo deletado com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro: {erro}")
+#----------------------------------------------------------
+# MENU
+#----------------------------------------------------------
+print("\n -- MENU -- \n")
+ask = input("\n - 1 - Empresas \n 2 - Viagens")
+#----------------------------------------------------------
+match ask:
+    case "1":
+        print("\n Página: Empresas/Companhias")
+        ask_1 = input("1 - Cadastrar \n 2 - Listar \n 3 - Atualizar \n 4 - Deletar")
+        match ask_1:
+            case "1":
+                cadastrar_empresa()
+            case "2": 
+                listar_companhias()
+            case "3":
+                atualizar_empresa()
+            case "4":
+                deletar_empresa()
+#----------------------------------------------------------
+    case "2": 
+        print("\n Página: Viagens/Voos")
+        ask_1 = input("1 - Cadastrar \n 2 - Listar \n 3 - Atualizar \n 4 - Deletar")
+        match ask_1:
+            case "1":
+                cadastrar_viagem()
+            case "2": 
+                listar_viagens()
+            case "3":
+                atualizar_viagem()
+            case "4":
+                deletar_viagem()
+#----------------------------------------------------------
