@@ -60,6 +60,35 @@ def cadastrar_empresa():
 #----------------------------------------------------------
 # CADASTRO VIAGEM
 #----------------------------------------------------------
+def cadastrar_viagem():
+    with Session() as session:
+        try:
+            destino = input("Destino: ").capitalize()
+            horario = int(input("Horário (ex: 14): "))
+
+            companhias = session.query(Companhia).all()
+            for c in companhias:
+                print(f"{c.id} - {c.nome}")
+
+            companhia_id = int(input("ID da companhia: "))
+            companhia = session.get(Companhia, companhia_id)
+
+            if not companhia:
+                print("Companhia não encontrada!")
+                return
+
+            voo = Voo(destino=destino, horario=horario, companhia=companhia)
+            session.add(voo)
+            session.commit()
+
+            print("Voo cadastrado com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro: {erro}")
+#----------------------------------------------------------
+# LISTAR COMPANHIAS
+#----------------------------------------------------------
 def listar_companhias():
     with Session() as session:
         companhias = session.query(Companhia).all()
@@ -69,7 +98,7 @@ def listar_companhias():
             for voo in companhia.viagens:
                 print(f"Destino: {voo.destino} | Horário: {voo.horario}")
 #----------------------------------------------------------
-# LISTAR COMPANHIAS
+# LISTAR VIAGENS
 #----------------------------------------------------------
 def listar_viagens():
     with Session() as session:
