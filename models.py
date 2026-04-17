@@ -153,3 +153,46 @@ def atualizar_viagem():
         except Exception as erro:
             session.rollback()
             print(f"Erro: {erro}")
+#----------------------------------------------------------
+# DELETAR EMPRESA
+#----------------------------------------------------------
+def deletar_empresa():
+    with Session() as session:
+        try:
+            id_empresa = int(input("ID da empresa: "))
+            empresa = session.get(Companhia, id_empresa)
+
+            if not empresa:
+                print("Empresa não encontrada!")
+                return
+
+            session.delete(empresa)
+            session.commit()
+
+            print("Empresa deletada com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro: {erro}")
+#----------------------------------------------------------
+# DELETAR VIAGEM
+#----------------------------------------------------------
+def deletar_viagem():
+    with Session() as session:
+        try:
+            id_voo = int(input("ID do voo: "))
+            voo = session.get(Voo, id_voo)
+
+            if not voo:
+                print("Voo não encontrado!")
+                return
+
+            session.delete(voo)
+            session.commit()
+
+            print("Voo deletado com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro: {erro}")
+#----------------------------------------------------------
