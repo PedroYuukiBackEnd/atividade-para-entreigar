@@ -107,4 +107,49 @@ def listar_viagens():
         for voo in voos:
             print(f"ID: {voo.id} | Destino: {voo.destino} | Companhia: {voo.companhia.nome}")
 #----------------------------------------------------------
+# ATUALIZAR EMPRESA
+#----------------------------------------------------------
+def atualizar_empresa():
+    with Session() as session:
+        try:
+            id_empresa = int(input("ID da empresa: "))
+            empresa = session.get(Companhia, id_empresa)
 
+            if not empresa:
+                print("Empresa não encontrada!")
+                return
+
+            novo_nome = input("Novo nome: ").capitalize()
+            empresa.nome = novo_nome
+
+            session.commit()
+            print("Empresa atualizada com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro: {erro}")
+#----------------------------------------------------------
+# ATUALIZAR VIAGEM
+#----------------------------------------------------------
+def atualizar_viagem():
+    with Session() as session:
+        try:
+            id_voo = int(input("ID do voo: "))
+            voo = session.get(Voo, id_voo)
+
+            if not voo:
+                print("Voo não encontrado!")
+                return
+
+            novo_destino = input("Novo destino: ").capitalize()
+            novo_horario = int(input("Novo horário: "))
+
+            voo.destino = novo_destino
+            voo.horario = novo_horario
+
+            session.commit()
+            print("Voo atualizado com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro: {erro}")
