@@ -2,7 +2,9 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 
 Base = declarative_base()
-
+#----------------------------------------------------------
+# CLASSE COMPANHIAS/EMPRESAS
+#----------------------------------------------------------
 class Companhia(Base):
     __tablename__ = "companhias"
     
@@ -16,8 +18,9 @@ class Companhia(Base):
 
     def __repr__(self):
         return f"ID: {self.id} - COMPANHIA: {self.nome}"
-
-
+#----------------------------------------------------------
+# CLASSE VOOS
+#----------------------------------------------------------
 class Voo(Base):
     __tablename__ = "viagens"
 
@@ -40,8 +43,9 @@ engine = create_engine("sqlite:///ViageFacil.db")
 Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
-
-#cadastro de empresa e viagem
+#----------------------------------------------------------
+# CADASTRO EMPRESA
+#----------------------------------------------------------
 def cadastrar_empresa():
     with Session() as session:
         try:
@@ -49,53 +53,29 @@ def cadastrar_empresa():
             empresa = Companhia(nome=nome_empresa)
             session.add(empresa)
             session.commit()
-            print(f"Empresa {nome_empresa} cadastrado com sucesso!")
+            print(f"Empresa {nome_empresa} cadastrada com sucesso!")
         except Exception as erro:
             session.rollback()
-            print(f"Ocorreu um erro {erro}")
-
-def cadastrar_viagem():
-    with Session() as session:
-        try:
-            destino = input("Digite o destino: ").capitalize()
-            empresa = session.query(Companhia).filter_by(nome=destino).first()
-            if empresa == None:
-                print(f"Nenhum voo encontrado com esse nome {destino}")
-                return
-            else:
-                companhias = input("Digite o nome da companhia para cadastrar").capitalize()
-                companhia = session.query(Companhia).filter_by(nome=companhias).first()
-                if companhia == None:
-                    print(f"Nenhuma companhia cadastrada com esse nome {companhias}")
-                    return
-                else:
-                    companhia.empresa.append(empresa)
-                    session.commit()
-                    print(f"Viagem {destino} registrada com sucesso na companhia {companhias}")
-        except Exception as erro:
-            session.rollback()
-            print(f"Ocorreu um erro {erro}")
-
+            print(f"Erro: {erro}")
+#----------------------------------------------------------
+# CADASTRO VIAGEM
+#----------------------------------------------------------
 def listar_companhias():
     with Session() as session:
-        try:
-            todas_companhias = session.query(Companhia).all()
-            for companhia in todas_companhias:
-                print(f"\--- Companhia {companhia.nome} ---")
-                for viagens in companhia.viagens:
-                    print(viagens.destino)
-        except Exception as erro:
-            session.rollback()
-            print(f"Ocorreu um erro {erro}")
+        companhias = session.query(Companhia).all()
 
-def listar_viagem():
+        for companhia in companhias:
+            print(f"\n--- {companhia.nome} ---")
+            for voo in companhia.viagens:
+                print(f"Destino: {voo.destino} | Horário: {voo.horario}")
+#----------------------------------------------------------
+# LISTAR COMPANHIAS
+#----------------------------------------------------------
+def listar_viagens():
     with Session() as session:
-        try:
-            todas_viagens = session.query(Companhia).all()
-            for viagem in todas_viagens:
-                destinos = [voo.destino for voo in viagens.companhias]
-                print(f"Destino: {viagens.destino} - Companhias: {destinos}")
-                    
-        except Exception as erro:
-            session.rollback()
-            print(f"Ocorreu um erro {erro}")
+        voos = session.query(Voo).all()
+
+        for voo in voos:
+            print(f"ID: {voo.id} | Destino: {voo.destino} | Companhia: {voo.companhia.nome}")
+#----------------------------------------------------------
+
