@@ -60,6 +60,35 @@ def cadastrar_empresa():
 #----------------------------------------------------------
 # CADASTRO VIAGEM
 #----------------------------------------------------------
+def cadastrar_viagem():
+    with Session() as session:
+        try:
+            destino = input("Destino: ").capitalize()
+            horario = int(input("Horário (ex: 14): "))
+
+            companhias = session.query(Companhia).all()
+            for c in companhias:
+                print(f"{c.id} - {c.nome}")
+
+            companhia_id = int(input("ID da companhia: "))
+            companhia = session.get(Companhia, companhia_id)
+
+            if not companhia:
+                print("Companhia não encontrada!")
+                return
+
+            voo = Voo(destino=destino, horario=horario, companhia=companhia)
+            session.add(voo)
+            session.commit()
+
+            print("Voo cadastrado com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro: {erro}")
+#----------------------------------------------------------
+# LISTAR COMPANHIAS
+#----------------------------------------------------------
 def listar_companhias():
     with Session() as session:
         companhias = session.query(Companhia).all()
@@ -69,7 +98,7 @@ def listar_companhias():
             for voo in companhia.viagens:
                 print(f"Destino: {voo.destino} | Horário: {voo.horario}")
 #----------------------------------------------------------
-# LISTAR COMPANHIAS
+# LISTAR VIAGENS
 #----------------------------------------------------------
 def listar_viagens():
     with Session() as session:
@@ -78,4 +107,92 @@ def listar_viagens():
         for voo in voos:
             print(f"ID: {voo.id} | Destino: {voo.destino} | Companhia: {voo.companhia.nome}")
 #----------------------------------------------------------
+# ATUALIZAR EMPRESA
+#----------------------------------------------------------
+def atualizar_empresa():
+    with Session() as session:
+        try:
+            id_empresa = int(input("ID da empresa: "))
+            empresa = session.get(Companhia, id_empresa)
 
+            if not empresa:
+                print("Empresa não encontrada!")
+                return
+
+            novo_nome = input("Novo nome: ").capitalize()
+            empresa.nome = novo_nome
+
+            session.commit()
+            print("Empresa atualizada com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro: {erro}")
+#----------------------------------------------------------
+# ATUALIZAR VIAGEM
+#----------------------------------------------------------
+def atualizar_viagem():
+    with Session() as session:
+        try:
+            id_voo = int(input("ID do voo: "))
+            voo = session.get(Voo, id_voo)
+
+            if not voo:
+                print("Voo não encontrado!")
+                return
+
+            novo_destino = input("Novo destino: ").capitalize()
+            novo_horario = int(input("Novo horário: "))
+
+            voo.destino = novo_destino
+            voo.horario = novo_horario
+
+            session.commit()
+            print("Voo atualizado com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro: {erro}")
+#----------------------------------------------------------
+# DELETAR EMPRESA
+#----------------------------------------------------------
+def deletar_empresa():
+    with Session() as session:
+        try:
+            id_empresa = int(input("ID da empresa: "))
+            empresa = session.get(Companhia, id_empresa)
+
+            if not empresa:
+                print("Empresa não encontrada!")
+                return
+
+            session.delete(empresa)
+            session.commit()
+
+            print("Empresa deletada com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro: {erro}")
+#----------------------------------------------------------
+# DELETAR VIAGEM
+#----------------------------------------------------------
+def deletar_viagem():
+    with Session() as session:
+        try:
+            id_voo = int(input("ID do voo: "))
+            voo = session.get(Voo, id_voo)
+
+            if not voo:
+                print("Voo não encontrado!")
+                return
+
+            session.delete(voo)
+            session.commit()
+
+            print("Voo deletado com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro: {erro}")
+#----------------------------------------------------------
